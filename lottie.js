@@ -18,6 +18,6 @@ lottie.loadAnimation({
 document.getElementById("start-button").addEventListener(`click`, () => {
     document.body.classList.add(`fade-out`);
     setTimeout(() => {
-        window.location.href = `./game.html`;
+        window.location.href = `./orderPage.html`;
     }, 1000);
 });
