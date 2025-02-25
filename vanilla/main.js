@@ -2,7 +2,7 @@
 const { app, BrowserWindow } = require('electron'); // electron 모듈을 불러옴
 // app 객체는 애플리케이션의 수명 주기를 관리(앱 시작 및 종료, 브라우저 창 생성 등 애플리케이션의 수명 주기를 제어)
 // BrowserWindow 객체는 브라우저 창을 생성 
-
+//app.disableHardwareAcceleration(); // GPU 가속 비활성화
 let mainWindow = null; // 애플리케이션의 메인 창을 저장하기 위해 선언. 이 변수는 나중에 브라우저 창 객체를 참조
 
 
@@ -13,7 +13,9 @@ app.on('ready',
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
-
+      // webPreferences: {
+      //   hardwareAcceleration: true // GPU 가속 활성화
+      // }
     });   // 브라우저 창 객체를 생성하고 mainWindow 변수에 저장. fullscreen: true로 설정하면 전체 화면으로 표시
     mainWindow.loadURL(`file://${__dirname}/index.html`); // 브라우저 창에 표시할 HTML 파일을 지정. __dirname은 현재 실행 중인 스크립트가 있는 디렉터리를 나타냄. index.html 파일을 불러옴
 
