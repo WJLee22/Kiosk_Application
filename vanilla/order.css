@@ -1,7 +1,7 @@
 /* order.css */
 
 .chat-container {
-  position: fixed;
+  position: fixed; /*메뉴화면 위에 float 효과*/
   bottom: 20px;
   right: 20px;
   width: 300px;
@@ -21,7 +21,7 @@
 
 .chat-body {
   height: 200px;
-  overflow-y: auto;
+  overflow-y: auto; /* 챗봇 화면 내부에 대화목록들 리스트화. 스크롤바 형성*/
   padding: 10px;
   background-color: white;
 }
