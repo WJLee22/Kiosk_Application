@@ -62,6 +62,16 @@
       </div>
     </div>
 
+    <!-- Chatbot -->
+    <div class="chat-container">
+      <div class="chat-header">챗봇</div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="메시지를 입력하세요..." />
+        <button onclick="sendMessage()">전송</button>
+      </div>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -83,10 +93,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script>
-      function addToOrder(menu, price) {
-        alert(menu + '가(이) ₩' + price + '에 추가되었습니다.');
-      }
-    </script>
+    <script src="order.js"></script>
   </body>
 </html>
