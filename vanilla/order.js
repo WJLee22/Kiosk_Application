@@ -19,29 +19,23 @@ async function sendMessage() {
     userMessage.textContent = message;
     chatBody.appendChild(userMessage);
 
-    // Google Gemini API 호출
+    // Flask 서버 호출
     try {
-        const response = await fetch('https://gemini.googleapis.com/v1beta1/models/gemini-pro:generateContent', {
+        const response = await fetch('http://localhost:5000/chat', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer API-KEY' // API 키
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: message
-                    }]
-                }]
-            }),
+            body: JSON.stringify({ message: message }),
         });
 
         if (!response.ok) {
             throw new Error('API 호출 실패: ' + response.statusText);
         }
 
-        const data = await response.json();
-        const botMessage = data.candidates[0].content.parts[0].text; // 응답 구조 변경
+
+        const data = await response.json(); // JSON 형식으로 응답 파싱
+        const botMessage = data.text; // JSON에서 텍스트 추출
 
         // 챗봇 응답 추가
         const botResponse = document.createElement('div');
