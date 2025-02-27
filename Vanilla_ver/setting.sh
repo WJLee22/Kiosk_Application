@@ -12,5 +12,3 @@ sudo apt install -y nodejs
 
 #case 2: sudo npm install -g electron
 # sudo npm install -g electron  (시스템 전체에서 사용 가능한 경로에 설치)
-
-22:17
