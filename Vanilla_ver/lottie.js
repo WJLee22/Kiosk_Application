@@ -12,7 +12,7 @@ lottie.loadAnimation({
     renderer: 'svg',
     loop: true,
     autoplay: true,
-    path: './lottie/welcome.json' // Lottie 애니메이션 JSON 파일 경로
+    path: './lottie/welcome.json' // Lottie 애니메이션 JSON 파일 경로.
 });
 
 document.getElementById("start-button").addEventListener(`click`, () => {
