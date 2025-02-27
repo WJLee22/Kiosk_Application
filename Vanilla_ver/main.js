@@ -2,11 +2,11 @@ const { app, BrowserWindow } = require("electron"); // electron 모듈을 불러
 // app 객체는 애플리케이션의 수명 주기를 관리(앱 시작 및 종료, 브라우저 창 생성 등 애플리케이션의 수명 주기를 제어)
 // BrowserWindow 객체는 브라우저 창을 생성
 
-// {/*----------*/ }
-// {/*라즈베리파이 및 rubik pi와 같은 저사양 데스크톱에서의 성능 최적화 환경설정 2가지*/ }
-// app.disableHardwareAcceleration(); // GPU 가속 비활성화: 라즈베리파이의 GPU 성능이 낮아, GPU가속시 성능이 저하될 수 있음. Chromium의 GPU 가속 기능을 완전히 끕니다. 이는 GPU를 사용하지 않고 CPU로 모든 렌더링 작업을 처리하도록 지시.
-// app.commandLine.appendSwitch('disable-software-rasterizer'); // 소프트웨어 래스터라이저 비활성. 소프트웨어 래스터라이저는 GPU를 사용할 수 없는 경우에 CPU로 그래픽을 렌더링하는 방법. 라즈베리파이와 같은 저사양 하드웨어에서는 GPU 가속을 비활성화하고, 소프트웨어 래스터라이저도 비활성화하여 CPU 부하를 줄이는 것이 좋음
-// {/*----------*/ }
+{/*----------*/ }
+{/*라즈베리파이 및 rubik pi와 같은 저사양 데스크톱에서의 성능 최적화 환경설정 2가지*/ }
+app.disableHardwareAcceleration(); // GPU 가속 비활성화: 라즈베리파이의 GPU 성능이 낮아, GPU가속시 성능이 저하될 수 있음. Chromium의 GPU 가속 기능을 완전히 끕니다. 이는 GPU를 사용하지 않고 CPU로 모든 렌더링 작업을 처리하도록 지시.
+app.commandLine.appendSwitch('disable-software-rasterizer'); // 소프트웨어 래스터라이저 비활성. 소프트웨어 래스터라이저는 GPU를 사용할 수 없는 경우에 CPU로 그래픽을 렌더링하는 방법. 라즈베리파이와 같은 저사양 하드웨어에서는 GPU 가속을 비활성화하고, 소프트웨어 래스터라이저도 비활성화하여 CPU 부하를 줄이는 것이 좋음
+{/*----------*/ }
 
 let mainWindow = null; // 애플리케이션의 메인 창을 저장하기 위해 선언. 이 변수는 나중에 브라우저 창 객체를 참조
 
