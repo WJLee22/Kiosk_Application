@@ -30,7 +30,7 @@ app.on('ready',
 
 // 맥 OS에서는 애플리케이션을 종료해도 메뉴바에는 남아있음. so, darwin 플랫폼에서는 애플리케이션을 종료하지 않도록 설정
 // 맥 OS에서는 메뉴바에서 명령을 실행하거나 Cmd+Q 키를 눌러야 애플리케이션이 종료됨
-// .on 이란, 이벤트 리스너를 추가하는 메소드. 즉, app 객체에 window-all-closed 이벤트 리스너를 추가. 'window-all-closed' 이벤트리스너는 모든 창이 닫히면 발생 -> 콜백으로 app.quit() 실행.  app.quit()은 애플리케이션을 종료하는 메소드 
+// .on 이란, 이벤트 리스너를 추가하는 메소드. 즉, app 객체에 window-all-closed 이벤트 리스너를 추가. 'window-all-closed' 이벤트리스너는 모든 창이 닫히면 발생 -> 콜백으로 app.quit() 실행.  app.quit()은 애플리케이션을 종료하는 메서드.
 app.on('window-all-closed',
   () => {
     if (process.platform !== 'darwin')

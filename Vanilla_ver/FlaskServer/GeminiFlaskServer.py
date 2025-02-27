@@ -20,7 +20,7 @@ client = genai.Client(api_key=API_KEY)
 # chat() 함수 정의. 클라이언트로부터 메시지를 받아 Gemini API에 요청을 보내고, 응답을 클라이언트에 반환
 def chat():
     try:
-        # 클라이언트로부터 메시지 받기.
+        # 클라이언트로부터 메시지 받기
         data = request.json
         message = data.get('message')
 
