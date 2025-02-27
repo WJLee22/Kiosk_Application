@@ -37,7 +37,7 @@ async function sendMessage() {
         const data = await response.json(); // JSON 형식으로 응답 파싱
         const botMessage = data.text; // JSON에서 텍스트 추출
 
-        // 챗봇 응답 추가
+        // 챗봇 응답 item 추가
         const botResponse = document.createElement('div');
         botResponse.className = 'chat-message bot-message';
         botResponse.textContent = botMessage;
