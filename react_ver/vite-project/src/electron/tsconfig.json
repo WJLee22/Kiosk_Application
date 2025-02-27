@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    //require strict types (null-save) 항상 해줄것.널 safe
+    "strict": true,
+    // tell TypeScript to generate ESM Syntax(import나 export 같은 es module 문법 사용하기위함. instead of  require) 최신 electron 이나 vite에서는 ESM을 사용하기때문에.
+    "target": "ESNext",
+    // tell TypeScript to require ESM Syntax as input (including .ks file imports)
+    "module": "NodeNext",
+    // define where to put generates JS(타입스크립트 파일을 컴파일한 결과물인 자바스크립트 파일을 어디에 저장할지 경로를 정의. 결국 웹에서는 js가 요구되니,타입스크립트는 js로 변환되어야함. 타입스크립트는 그저 js를 타입 안정하게 작성할 수 있도록 도와주는 superset 언어일뿐.)
+    "outDir": "../../dist-electron",
+    // ignore errors from dependencies
+    "skipLibCheck": true
+  }
+}

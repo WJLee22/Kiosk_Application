@@ -1,9 +1,10 @@
+# pip install Flask Flask-Cors google-cloud-genai python-dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from google import genai
 import os
 from dotenv import load_dotenv
-
+ 
 
 app = Flask(__name__)
 CORS(app)  # CORS 허용. 
