@@ -6,7 +6,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url('background.jpg'); /* 배경 이미지 추가 */
+  background-image: url('../assets/image/background.jpg'); /* 배경 이미지 추가 */
   background-size: cover;
   background-position: center;
 }
