@@ -14,11 +14,22 @@ let mainWindow = null; // 애플리케이션의 메인 창을 저장하기 위�
 // app 객체에 ready 이벤트 리스너를 추가. ready 이벤트는 애플리케이션이 메모리에 로드되면 발생
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 1200,
+    //webPreferences는 브라우저 창(BrowserWindow)의 웹 페이지 렌더링 방식을 설정하는 옵션
+    webPreferences: {
+      nodeIntegration: true, // Node.js API 사용 허용
+      contextIsolation: false, // 컨텍스트 분리 비활성화 
+      webSecurity: false, // 웹 보안 비활성화 (로컬 파일 로드 허용) -> toss Payments의 결제 redirect iframe을 로드하기 위해 필요함
+    },
+    // nodeIntegration: true는 렌더러 프로세스에서 Node.js API를 사용할 수 있도록 허용함.
+    // contextIsolation: false는 Node.js API를 전역 범위에서 사용할 수 있도록 함.
+    //  webSecurity: false는 보안을 비활성화함 
+
     // webPreferences: {
     //   hardwareAcceleration: true // GPU 가속 활성화
     // }
+
   }); // 브라우저 창 객체를 생성하고 mainWindow 변수에 저장. fullscreen: true로 설정하면 전체 화면으로 표시
   mainWindow.loadURL(`file://${__dirname}/index.html`); // 브라우저 창에 표시할 HTML 파일을 지정. __dirname은 현재 실행 중인 스크립트가 있는 디렉터리를 나타냄. index.html 파일을 불러옴
 

@@ -17,7 +17,7 @@ body {
 }
 
 .fade-out {
-  animation: fadeOut 1s forwards;
+  animation: fadeOut 2s forwards;
 }
 
 @keyframes fadeOut {

@@ -5,6 +5,13 @@ function addToOrder(menu, price) {
     alert(menu + '가(이) ₩' + price + '에 추가되었습니다.');
 }
 
+document.getElementById("pay-Button").addEventListener('click', () => {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+        window.location.href = `./checkout.html`;
+    }, 2000);
+});
+
 // 챗봇 메시지 전송 함수
 async function sendMessage() {
     const chatInput = document.getElementById('chatInput');

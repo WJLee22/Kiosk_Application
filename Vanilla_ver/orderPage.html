@@ -10,15 +10,19 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="order.css" />
+    <link rel="stylesheet" href="orderPage.css" />
   </head>
   <body>
     <div class="container mt-5">
       <h1 class="text-center mb-4">메뉴 선택</h1>
+      <div class="d-flex justify-content-center">
+        <button id="pay-Button" class="btn btn-primary mb-4" data-bs-target="#orderModal">결제하기</button>
+      </div>
+
       <div class="row">
         <div class="col-md-3 mb-4">
           <div class="card">
-            <img src="아메리카노.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
+            <img src="./assets/아메리카노.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
             <div class="card-body text-center">
               <h5 class="card-title">아메리카노</h5>
               <p class="card-text">₩4,000</p>
@@ -29,7 +33,7 @@
 
         <div class="col-md-3 mb-4">
           <div class="card">
-            <img src="카페라떼.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
+            <img src="./assets/카페라떼.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
             <div class="card-body text-center">
               <h5 class="card-title">카페라떼</h5>
               <p class="card-text">₩5,000</p>
@@ -40,7 +44,7 @@
 
         <div class="col-md-3 mb-4">
           <div class="card">
-            <img src="베리스무디.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
+            <img src="./assets/베리스무디.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
             <div class="card-body text-center">
               <h5 class="card-title">베리스무디</h5>
               <p class="card-text">₩6,000</p>
@@ -51,7 +55,7 @@
 
         <div class="col-md-3 mb-4">
           <div class="card">
-            <img src="허니브레드.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
+            <img src="./assets/허니브레드.png" class="card-img-top" alt="메뉴 이미지" style="height: 200px" />
             <div class="card-body text-center">
               <h5 class="card-title">허니브레드</h5>
               <p class="card-text">₩7,000</p>
@@ -93,6 +97,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="order.js"></script>
+    <script src="orderPage.js"></script>
   </body>
 </html>
