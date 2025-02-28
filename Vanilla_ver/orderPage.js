@@ -8,7 +8,7 @@ function addToOrder(menu, price) {
 document.getElementById("pay-Button").addEventListener('click', () => {
     document.body.classList.add('fade-out');
     setTimeout(() => {
-        window.location.href = `./checkout.html`;
+        window.location.href = `./toss/checkout.html`;
     }, 2000);
 });
 
