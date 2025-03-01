@@ -16,6 +16,7 @@ app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 1200,
+    show: false,
     //webPreferences는 브라우저 창(BrowserWindow)의 웹 페이지 렌더링 방식을 설정하는 옵션
     webPreferences: {
       nodeIntegration: true, // Node.js API 사용 허용
@@ -32,6 +33,11 @@ app.on("ready", () => {
 
   }); // 브라우저 창 객체를 생성하고 mainWindow 변수에 저장. fullscreen: true로 설정하면 전체 화면으로 표시
   mainWindow.loadURL(`file://${__dirname}/index.html`); // 브라우저 창에 표시할 HTML 파일을 지정. __dirname은 현재 실행 중인 스크립트가 있는 디렉터리를 나타냄. index.html 파일을 불러옴
+
+  // 창이 준비되면 표시
+  mainWindow.on("ready-to-show", () => {
+    mainWindow.show(); // 창을 표시
+  });
 
   mainWindow.on("closed", () => {
     mainWindow = null;
