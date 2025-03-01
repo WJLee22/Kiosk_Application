@@ -3,7 +3,7 @@
 document.getElementById("start-button").addEventListener(`click`, () => {
     document.body.classList.add(`fade-out`);
     setTimeout(() => {
-        window.location.href = `./page/orderPage.html`;
+        window.location.href = `./orderPage.html`;
     }, 2000);
 });
 
