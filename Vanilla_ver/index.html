@@ -6,11 +6,17 @@
     <title>키오스크 첫 화면</title>
     <link rel="stylesheet" href="./style/index.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
+    <style>
+      /* 로딩 중일 때 숨길 요소들 */
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div class="lottie-container" id="welcome"></div>
     <div class="lottie-container" id="pumpkin"></div>
-    <input type="button" value="주문" id="start-button" />
+    <input type="button" value="주문" id="start-button" class="hidden" />
 
     <script src="./index.js"></script>
   </body>
