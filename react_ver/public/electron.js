@@ -11,10 +11,9 @@ app.commandLine.appendSwitch('disable-software-rasterizer');
 let mainWindow = null;
 
 async function createWindow() {
-    // electron-is-dev 모듈을 사용하면 애플리케이션이 개발 모드에서 실행 중인지 배포 모드에서 실행 중인지 쉽게 판단할 수 있음.
-    // const isDev = (await import('electron-is-dev')).default; => 
-
-    const isDev = (await import('electron-is-dev')).default;
+    // electron-is-dev 대신 process.env.NODE_ENV를 사용하여 애플리케이션이 개발 모드에서 실행 중인지 배포 모드에서 실행 중인지 동기적으로 개발 모드와 배포 모드를 판단.
+    // npm start로 실행할 때는 process.env.NODE_ENV가 'development'로 설정되고, npm run build로 빌드한 후에는 process.env.NODE_ENV가 'production'으로 설정됨.(package.json의 scripts에 설정해두었음)
+    const isDev = process.env.NODE_ENV === 'development';
 
     mainWindow = new BrowserWindow({
         width: 1200,

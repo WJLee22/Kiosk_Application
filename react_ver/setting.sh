@@ -27,6 +27,7 @@ sudo apt install -y nodejs
 
 # ✅📌📌✅
 #6 deploy_실 배포단계(setup.exe): 설치파일을 통한 실제 데스크탑 앱 배포시 주의점⚠
+
 # 만약 실제 데스크탑 앱 배포 후 사용자가 프로그램 설치를 돕는 setup파일을 이용하게된다면, 아래의 주의사항을 반드시 확인해야함.
 # 일렉트론 메인 프로세스 모듈인 electron.js에서, 현재 실행 모드가 개발모드인지 파악하는 모듈인 electron is dev를 동기적으로 가져오는 코드부분인 <const isDev = (await import('electron-is-dev')).default;> 해당 구문을 제거해줘야한다.
 # (import는 node module에서 설치해둔 모듈을 가져오는 구문인데, setup파일 실행을 통해 설치된 데스크탑 앱 디렉터리에는 node module이 없기 때문에, await으로 인해 동기적으로 계속 기다리게되어 앱 윈도우가 생성되지않아 화면에 앱이 보이지않게된다. 
@@ -40,3 +41,21 @@ sudo apt install -y nodejs
 # 만약 현재 개발단계라면, 위 #6 주의사항을 무시하고 개발을 진행하면 된다. 
 
 # setup파일 실행을통해 생성된 실행프로그램과는 달리, npm run dist를 통해 생성된 dist디렉터리 내의 .exe 실행프로그램의 경우엔, 상위 디렉터리에 node_modules가 존재하기 때문에, 해당 구문을 제거하지 않아도 정상적으로 실행된다. 
+
+
+# ✅📌📌✅
+#6 개선! (electron-is-dev 대신 process.env.NODE_ENV 사용)
+# electron-is-dev를 사용하지 않고, process.env.NODE_ENV를 사용하여 개발 모드와 배포 모드를 구분하여 해결.
+#개발 모드: npm start를 실행할 때 process.env.NODE_ENV가 development로 설정됨.
+#배포 모드: npm run build를 실행할 때 process.env.NODE_ENV가 production로 설정됨.
+
+# 변경사항1.🔰🔰 electron-is-dev 대신 process.env.NODE_ENV 사용 🔰🔰
+# const isDev = (await import('electron-is-dev')).default; ▶ const isDev = process.env.NODE_ENV === 'development';
+
+# 변경사항2. 🔰🔰 npm start를 실행할 때 process.env.NODE_ENV가 development로 설정되도록 package.json을 수정 🔰🔰
+# 현재 개발중인 호스트의 os에 맞게 electron 실행 스크립트를 아래와 같이 설정해준다.
+# Windows ▶ "electron:start": "set NODE_ENV=development&& electron ."
+# macOS/Linux ▶ "electron:start": "export NODE_ENV=development && electron ."
+
+# 이로써, npm start로 실행할 때는 process.env.NODE_ENV가 'development'로 설정되고, npm run build로 빌드한 후에는 process.env.NODE_ENV가 'production'으로 설정되어짐으로, 
+# npm start기반 개발환경에서는 일렉트론 앱에 http://localhost:3000을 로드하고, npm run build기반 배포환경에서는 build/index.html을 로드하게 되어 #6 주의사항에서의 문제을 해결할 수 있었다.

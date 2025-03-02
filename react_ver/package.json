@@ -13,7 +13,7 @@
   },
   "scripts": {
     "react:start": "react-scripts start",
-    "electron:start": "electron .",
+    "electron:start": "set NODE_ENV=development&& electron .",
     "start": "concurrently \"npm run react:start\" \"npm run electron:start\"",
     "build": "react-scripts build",
     "dist": "electron-builder",
