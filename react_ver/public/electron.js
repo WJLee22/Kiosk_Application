@@ -6,11 +6,14 @@ const path = require('path');
 app.disableHardwareAcceleration();
 app.commandLine.appendSwitch('disable-software-rasterizer');
 
+// BrowserWindow 객체는 전역으로 관리함.
+// 전역이 아닌 경우 자바스크립트 가비지 컬렉팅 발생 시 의도치 않게 browser window가 닫힐 수 있음 
+let mainWindow = null;
 
 async function createWindow() {
     const isDev = (await import('electron-is-dev')).default;
 
-    let mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1200,
         height: 1200,
         show: false,
