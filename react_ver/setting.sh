@@ -21,4 +21,5 @@ sudo apt install -y nodejs
 #5 배포단계: 각 os에 맞는 실행파일 생성
 # 5-1: <npm run build>로 현재 리액트 프로젝트를 빌드.
 # 5-2: <npm run dist>로 5-1에서 생성된 build 폴더를 기반으로 Electron 애플리케이션을 패키징하여 실행프로그램 생성.
-
+# npm run build; npm run dist   <- 순차실행. 
+# 추후 <npm run build:dist> 스크립트로 작성할 예정. "build:dist": "npm run build && npm run dist",

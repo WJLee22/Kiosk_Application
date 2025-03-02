@@ -4,7 +4,7 @@
   "private": true,
   "main": "public/electron.js",
   "author": "wjlee",
-  "description": "Kiosk app for react_ver",
+  "description": "KioskApp",
   "homepage": "./",
   "dependencies": {
     "react": "^19.0.0",
@@ -43,23 +43,23 @@
   "build": {
     "appId": "com.example.react_ver",
     "productName": "ReactVerApp",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      "build/**/*"
+    ],
     "directories": {
       "buildResources": "assets"
     },
-    "files": [
-      "build/**/*",
-      "electron/**/*"
-    ],
-    "extraResources": [
-      "assets/**/*"
-    ],
     "linux": {
       "target": "AppImage",
-      "icon": "assets/icon.png"
+      "icon": "/icon.png"
     },
     "win": {
       "target": "nsis",
-      "icon": "assets/icon.ico"
+      "icon": "/icon.ico"
     }
   }
 }
