@@ -44,22 +44,13 @@
     "appId": "com.example.react_ver",
     "productName": "ReactVerApp",
     "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "extraResources": [
       "build/**/*"
     ],
-    "directories": {
-      "buildResources": "assets"
-    },
     "linux": {
-      "target": "AppImage",
-      "icon": "/icon.png"
+      "target": "AppImage"
     },
     "win": {
-      "target": "nsis",
-      "icon": "/icon.ico"
+      "target": "nsis"
     }
   }
 }
