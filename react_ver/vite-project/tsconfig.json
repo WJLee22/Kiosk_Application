@@ -1,5 +1,0 @@
-{
-  "files": [],
-  "exclude": ["src/electron"], // 일렉트론 폴더 제외.  Electron 관련 코드는 웹 애플리케이션의 빌드 과정에 포함될 필요가 없기 때문에, 이를 제외하여 빌드 시간을 최적화
-  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
-}
