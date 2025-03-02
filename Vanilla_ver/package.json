@@ -8,9 +8,9 @@
     "build": "electron-builder"
   },
   "keywords": [],
-  "author": "",
+  "author": "wjlee",
   "license": "ISC",
-  "description": "",
+  "description": "KioskApp",
   "devDependencies": {
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8"
@@ -23,7 +23,11 @@
     "productName": "KioskApp",
     "linux": {
       "target": "AppImage",
-      "icon": "build/icon.png"
+      "icon": "/build/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "/build/icon.ico"
     }
   }
 }
