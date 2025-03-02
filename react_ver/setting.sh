@@ -18,8 +18,25 @@ sudo apt install -y nodejs
 #(개발단계에서 편하게 사용가능: npm start 만 해줘도 개발중인 코드가 즉각 로드되어 electron이 실행됨)
 # <npm start>
 
-#5 배포단계: 각 os에 맞는 실행파일 생성
+#5 dist_배포단계: 각 os에 맞는 실행파일 생성
 # 5-1: <npm run build>로 현재 리액트 프로젝트를 빌드.
 # 5-2: <npm run dist>로 5-1에서 생성된 build 폴더를 기반으로 Electron 애플리케이션을 패키징하여 실행프로그램 생성.
 # npm run build; npm run dist   <- 순차실행. 
 # 추후 <npm run build:dist> 스크립트로 작성할 예정. "build:dist": "npm run build && npm run dist",
+
+
+# ✅📌📌✅
+#6 deploy_실 배포단계(setup.exe): 설치파일을 통한 실제 데스크탑 앱 배포시 주의점⚠
+# 만약 실제 데스크탑 앱 배포 후 사용자가 프로그램 설치를 돕는 setup파일을 이용하게된다면, 아래의 주의사항을 반드시 확인해야함.
+# 일렉트론 메인 프로세스 모듈인 electron.js에서, 현재 실행 모드가 개발모드인지 파악하는 모듈인 electron is dev를 동기적으로 가져오는 코드부분인 <const isDev = (await import('electron-is-dev')).default;> 해당 구문을 제거해줘야한다.
+# (import는 node module에서 설치해둔 모듈을 가져오는 구문인데, setup파일 실행을 통해 설치된 데스크탑 앱 디렉터리에는 node module이 없기 때문에, await으로 인해 동기적으로 계속 기다리게되어 앱 윈도우가 생성되지않아 화면에 앱이 보이지않게된다. 
+# 그러므로 실 배포단계에서는 해당 구문을 제거해주어야함을 꼭 인지하자.)  
+
+# 1.
+# const isDev = (await import('electron-is-dev')).default; 구문 제거.
+# 2.
+# isDev ? 'http://localhost:3000': `file://${path.join(__dirname, '../build/index.html')}` ▶ `file://${path.join(__dirname, '../build/index.html')}`  로 변경
+
+# 만약 현재 개발단계라면, 위 #6 주의사항을 무시하고 개발을 진행하면 된다. 
+
+# setup파일 실행을통해 생성된 실행프로그램과는 달리, npm run dist를 통해 생성된 dist디렉터리 내의 .exe 실행프로그램의 경우엔, 상위 디렉터리에 node_modules가 존재하기 때문에, 해당 구문을 제거하지 않아도 정상적으로 실행된다. 
