@@ -59,3 +59,9 @@ sudo apt install -y nodejs
 
 # 이로써, npm start로 실행할 때는 process.env.NODE_ENV가 'development'로 설정되고, npm run build로 빌드한 후에는 process.env.NODE_ENV가 'production'으로 설정되어짐으로, 
 # npm start기반 개발환경에서는 일렉트론 앱에 http://localhost:3000을 로드하고, npm run build기반 배포환경에서는 build/index.html을 로드하게 되어 #6 주의사항에서의 문제을 해결할 수 있었다.
+
+
+# 번외: npm start시, npm run react:start로 3000포트에서 리액트 앱이 먼저 실행되고, 그 다음에 npm run electron:start로 일렉트론 앱이 3000번 포트에서 실행중인 리액트 앱을 URL로 로드하여야 일렉트론 앱에서 리액트 앱을 보면서 개발이 가능한데, 
+# 이 순차실행을 위해 wait-on 모듈을 사용하여, 리액트 앱이 3000번 포트에서 실행될 때까지 기다렸다가 일렉트론 앱을 실행하도록 설정하여야한다.
+# 하지만 본 프로젝트에서는 굳이 wait-on 모듈을 사용하지 않아도, npm start를 실행할 때는 리액트 앱이 일렉트론 앱 실행보다 근소하게 먼저 실행되기에 별도로 설정해주지 않았다. 
+# 추후, 환경이 변경되어 순차성이 지켜지지 않는다면, wait-on 모듈을 사용하여 리액트 앱이 실행될 때까지 기다렸다가 일렉트론 앱을 실행하도록 설정해주어야할 것이다. ex) "electron:start": "set NODE_ENV=development&& wait-on http://localhost:3000 && electron ."
