@@ -2,7 +2,10 @@
   "name": "react_ver",
   "version": "0.1.0",
   "private": true,
-  "main": "electron/electron.js",
+  "main": "public/electron.js",
+  "author": "wjlee",
+  "description": "Kiosk app for react_ver",
+  "homepage": "./",
   "dependencies": {
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -13,6 +16,7 @@
     "electron:start": "electron .",
     "start": "concurrently \"npm run react:start\" \"npm run electron:start\"",
     "build": "react-scripts build",
+    "dist": "electron-builder",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron ."
@@ -35,5 +39,27 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "build": {
+    "appId": "com.example.react_ver",
+    "productName": "ReactVerApp",
+    "directories": {
+      "buildResources": "assets"
+    },
+    "files": [
+      "build/**/*",
+      "electron/**/*"
+    ],
+    "extraResources": [
+      "assets/**/*"
+    ],
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    }
   }
 }
