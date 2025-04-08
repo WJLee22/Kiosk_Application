@@ -1,4 +1,4 @@
-# pip install Flask Flask-Cors google-cloud-genai python-dotenv
+# pip install Flask Flask-Cors google-genai python-dotenv
 
 # 이 Flask 서버는 Gemini AI 기반의 챗봇 API 역할을하는 브릿지.
 # Electron 기반 키오스크 앱에서 이 서버에 요청을 보내면,
