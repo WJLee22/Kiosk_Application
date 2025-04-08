@@ -7,15 +7,24 @@
   "description": "KioskApp",
   "homepage": "./",
   "dependencies": {
+    "@chengsokdara/use-whisper": "^0.2.0",
+    "@picovoice/porcupine-react": "^3.0.3",
+    "@picovoice/web-voice-processor": "^4.0.9",
+    "framer-motion": "^12.6.2",
+    "mqtt": "^5.10.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1"
   },
   "scripts": {
     "react:start": "react-scripts start",
-    "electron:start": "set NODE_ENV=development&& electron .",
-    "start": "concurrently \"npm run react:start\" \"npm run electron:start\"",
+    "electron:start": "cross-env NODE_ENV=development electron .",
+    "electron:dev": "concurrently \"npm run react:start\" \"npm run electron:start\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
+    "serve": "serve -s build",
+    "kiosk": "npm run build && npm run serve",
     "dist": "electron-builder",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -23,8 +32,11 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
     "electron": "^34.3.0",
-    "electron-builder": "^25.1.8"
+    "electron-builder": "^25.1.8",
+    "serve": "^14.2.4",
+    "wait-on": "^8.0.3"
   },
   "browserslist": {
     "production": [
