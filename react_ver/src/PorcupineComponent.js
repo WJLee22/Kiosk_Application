@@ -7,7 +7,7 @@ const PorcupineComponent = () => {
 
     // Porcupine 설정 객체 생성
     const porcupineKeyword = {
-        publicPath: process.env.PUBLIC_URL + '/헤이--배리온_ko_wasm_v3_0_0_노랑망고.ppn', // public 폴더에 모델 파일을 넣어야 함
+        publicPath: process.env.PUBLIC_URL + '/배리온_lamar_라즈베리파이용.ppn', // public 폴더에 모델 파일을 넣어야 함
         label: '헤이배리온' // 감지된 키워드를 식별하는 레이블
     };
 
@@ -32,7 +32,7 @@ const PorcupineComponent = () => {
         const initPorcupine = async () => {
             try {
                 await init(
-                    'ㅋ', // 실제 키로 변경
+                    '키', // 실제 키로 변경
                     porcupineKeyword,
                     porcupineModel
                 );
