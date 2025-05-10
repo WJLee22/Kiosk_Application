@@ -284,6 +284,22 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
             <AnimatePresence>
                 {isListeningCommands && (
                     <>
+                        {/* 상단 중앙 리스닝 인디케이터 */}
+                        <motion.div
+                            className="top-listening-indicator"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
+                        >
+                            <div className="sound-wave-icon">
+                                <span />
+                                <span />
+                                <span />
+                            </div>
+                            <span className="listening-text">Listening...</span>
+                        </motion.div>
+
                         {/* 화면 가장자리 펄스 효과 */}
                         <motion.div
                             className="pulsating-border-effect"
@@ -298,7 +314,13 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
             {/* 음성 인식 상태 표시 카드 - isListeningCommands 상태일 때만 표시 */}
             {isListeningCommands && (
-                <div className="voice-status-card listening"> {/* 항상 listening 클래스 적용 */}
+                <motion.div
+                    className="voice-status-card listening" // 항상 listening 클래스 적용
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                >
                     <div className="card-content">
                         <div className="card-title">
                             명령을 말씀해주세요
@@ -307,7 +329,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                             자연스럽게 말씀해 주세요
                         </div>
                     </div>
-                </div>
+                </motion.div>
             )}
 
             {/* 스타일 정의 */}
@@ -328,6 +350,62 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     width: 100%;
                 }
 
+                /* 상단 중앙 리스닝 인디케이터 */
+                .top-listening-indicator {
+                    position: fixed;
+                    top: 20px; /* 화면 상단과의 간격 */
+                    left: 50%;
+                    transform: translateX(-50%);
+                    display: flex;
+                    align-items: center;
+                    padding: 8px 16px;
+                    background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
+                    border-radius: 20px; /* 둥근 모서리 */
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                    z-index: 1001; /* 카드보다 위에, 테두리 효과보다 위에 */
+                    color: white;
+                }
+
+                .sound-wave-icon {
+                    display: flex;
+                    align-items: flex-end; /* 막대들이 아래 정렬되도록 */
+                    height: 16px; /* 아이콘 높이 */
+                    margin-right: 8px;
+                }
+
+                .sound-wave-icon span {
+                    display: inline-block;
+                    width: 3px; /* 막대 두께 */
+                    margin: 0 1.5px; /* 막대 간 간격 */
+                    background-color: white;
+                    border-radius: 2px; /* 막대 둥글게 */
+                    animation: sound-wave-animation 1.2s infinite ease-in-out;
+                }
+
+                .sound-wave-icon span:nth-child(1) {
+                    height: 60%; /* 초기 높이 */
+                    animation-delay: 0s;
+                }
+                .sound-wave-icon span:nth-child(2) {
+                    height: 100%;
+                    animation-delay: 0.2s;
+                }
+                .sound-wave-icon span:nth-child(3) {
+                    height: 80%;
+                    animation-delay: 0.4s;
+                }
+
+                @keyframes sound-wave-animation {
+                    0%, 100% { transform: scaleY(0.3); }
+                    50% { transform: scaleY(1); }
+                }
+
+                .listening-text {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+
+
                 /* 화면 가장자리 펄스 효과 */
                 .pulsating-border-effect {
                     position: fixed;
@@ -337,20 +415,19 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     height: 100%;
                     pointer-events: none; /* 다른 요소 클릭 방해하지 않도록 */
                     z-index: 995; /* 다른 UI 요소들과의 관계 고려, 카드보다는 아래에 */
-                    animation: pulse-glow-animation 2.5s infinite alternate ease-in-out;
-                    /* box-shadow를 사용하므로 border 속성은 필요 없음 */
+                    animation: pulse-glow-animation 2.2s infinite alternate ease-in-out; /* 애니메이션 속도 약간 빠르게 */
                 }
 
                 @keyframes pulse-glow-animation {
                     0% {
                         box-shadow: 
-                            inset 0 0 25px 12px rgba(0, 160, 255, 0.25), /* 안쪽으로 부드럽게 퍼지는 빛 */
-                            0 0 25px 12px rgba(0, 160, 255, 0.25);  /* 바깥쪽으로 부드럽게 퍼지는 빛 */
+                            inset 0 0 30px 15px rgba(0, 150, 255, 0.3), /* 안쪽 빛: 확산 범위 증가, 투명도 약간 증가 */
+                            0 0 30px 15px rgba(0, 150, 255, 0.3);  /* 바깥쪽 빛: 확산 범위 증가, 투명도 약간 증가 */
                     }
                     100% {
                         box-shadow: 
-                            inset 0 0 50px 25px rgba(0, 160, 255, 0.55), /* 안쪽으로 더 넓고 진하게 퍼지는 빛 */
-                            0 0 50px 25px rgba(0, 160, 255, 0.55);  /* 바깥쪽으로 더 넓고 진하게 퍼지는 빛 */
+                            inset 0 0 60px 30px rgba(0, 170, 255, 0.65), /* 안쪽 빛: 확산 범위 대폭 증가, 투명도 대폭 증가 */
+                            0 0 60px 30px rgba(0, 170, 255, 0.65);  /* 바깥쪽 빛: 확산 범위 대폭 증가, 투명도 대폭 증가 */
                     }
                 }
                 
@@ -364,7 +441,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     color: white;
                     font-size: 14px;
                     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* AnimatePresence와 함께 부드러운 등장/퇴장 */
+                    /* transition은 AnimatePresence의 motion 컴포넌트가 담당 */
                     z-index: 1000; /* 가장자리 효과보다 위에 있도록 */
                     backdrop-filter: blur(10px);
                     -webkit-backdrop-filter: blur(10px);
