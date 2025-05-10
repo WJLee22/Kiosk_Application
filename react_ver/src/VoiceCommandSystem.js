@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const VoiceCommandSystem = ({ onVoiceCommand }) => {
     // 기존 상태 및 설정 코드 유지...
-    const [wakewordDetected, setWakewordDetected] = useState(false);
+    const [wakewordDetected, setWakewordDetected] = useState(false); // 내부 로직용 상태
     const [isListeningCommands, setIsListeningCommands] = useState(false);
-    const [lastDetection, setLastDetection] = useState(null);
+    const [lastDetection, setLastDetection] = useState(null); // 내부 로직용 상태
 
     // 타이머 레퍼런스
     const commandTimeoutRef = useRef(null);
@@ -39,9 +39,9 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
     // Porcupine Hook 사용 (웨이크워드 감지)
     const {
-        keywordDetection: wakewordDetection,
+        keywordDetection, // 로컬 상태 wakewordDetection과의 충돌을 피하기 위해 hook의 결과는 keywordDetection으로 받음
         isLoaded: wakewordLoaded,
-        isListening: wakewordListening,
+        isListening: porcupineIsListening, // 로컬 상태 isListeningCommands와의 명확한 구분을 위해 변수명 변경
         isError: wakewordError,
         error: wakewordErrorMsg,
         init: initWakeword,
@@ -54,7 +54,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
     const {
         inference: commandResult,
         isLoaded: commandLoaded,
-        isListening: commandListening,
+        isListening: rhinoIsListening, // 로컬 상태 isListeningCommands와의 명확한 구분을 위해 변수명 변경
         isError: commandError,
         error: commandErrorMsg,
         init: initCommand,
@@ -87,7 +87,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
         // 컴포넌트 언마운트 시 리소스 해제
         return () => {
-            if (wakewordListening) {
+            if (porcupineIsListening) {
                 stopWakeword();
             }
             releaseWakeword();
@@ -122,8 +122,8 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
     // 3. 웨이크워드 감지 처리
     useEffect(() => {
-        if (wakewordDetection !== null) {
-            console.log(`웨이크워드 '${wakewordDetection.label}' 감지됨!`);
+        if (keywordDetection !== null) {
+            console.log(`웨이크워드 '${keywordDetection.label}' 감지됨!`);
             setWakewordDetected(true);
             setLastDetection(new Date().toLocaleTimeString());
 
@@ -145,7 +145,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 }
             }, 10000); // 10초 타임아웃
         }
-    }, [wakewordDetection]);
+    }, [keywordDetection]); // keywordDetection 의존성 추가
 
     // 4. 음성 명령 결과 처리
     useEffect(() => {
@@ -181,10 +181,10 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
     // 6. 음성 명령 인식 모드 시작
     const startCommandMode = async () => {
-        if (commandLoaded && !commandListening && !commandError) {
+        if (commandLoaded && !rhinoIsListening && !commandError) {
             try {
                 // 웨이크워드 감지 일시 중지
-                if (wakewordListening) {
+                if (porcupineIsListening) {
                     await stopWakeword();
                 }
 
@@ -209,7 +209,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 resetToWakewordMode();
             }
         } else {
-            console.warn('음성 명령 인식을 시작할 수 없음:', { loaded: commandLoaded, listening: commandListening, error: commandError });
+            console.warn('음성 명령 인식을 시작할 수 없음:', { loaded: commandLoaded, listening: rhinoIsListening, error: commandError });
             setIsListeningCommands(false); // 시작 불가 시 상태 초기화
             resetToWakewordMode();
         }
@@ -225,7 +225,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
 
         try {
             // 웨이크워드 감지 재시작
-            if (!wakewordListening && wakewordLoaded) {
+            if (!porcupineIsListening && wakewordLoaded) {
                 await startWakeword();
                 console.log('웨이크워드 감지 재시작됨');
             }
@@ -280,68 +280,25 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
             <audio ref={wakeAudioRef} src="/sounds/wake.mp3" preload="auto" />
             <audio ref={successAudioRef} src="/sounds/success.mp3" preload="auto" />
 
-            {/* 음성 인식 시각화 - 코너 인디케이터 & 상단 바 */}
+            {/* 음성 인식 시각화 */}
             <AnimatePresence>
                 {isListeningCommands && (
                     <>
-                        {/* 상단 음성 인식 바 */}
+                        {/* 화면 가장자리 펄스 효과 */}
                         <motion.div
-                            className="voice-activity-bar"
-                            initial={{ opacity: 0, y: -20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <div className="voice-activity-bar-inner">
-                                <div className="voice-activity-indicator">
-                                    {/* 동적 음성 활동 표시기 */}
-                                    {[...Array(30)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            className="activity-bar"
-                                            animate={{
-                                                height: [
-                                                    `${5 + Math.random() * 15}px`,
-                                                    `${5 + Math.random() * 15}px`
-                                                ]
-                                            }}
-                                            transition={{
-                                                duration: 0.4 + Math.random() * 0.3,
-                                                repeat: Infinity,
-                                                repeatType: "reverse",
-                                                ease: "easeInOut"
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                                <div className="voice-status-text">음성 인식 중</div>
-                                <div className="mic-icon-small">
-                                    <svg viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
-                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* 코너 인디케이터 */}
-                        {[0, 1, 2, 3].map(corner => (
-                            <motion.div
-                                key={corner}
-                                className={`corner-indicator corner-${corner}`}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ duration: 0.3, delay: corner * 0.1 }}
-                            />
-                        ))}
+                            className="pulsating-border-effect"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.5 }} // 효과가 나타나고 사라지는 시간
+                        />
                     </>
                 )}
             </AnimatePresence>
 
-            {/* 음성 인식 상태 표시 카드 */}
-            <div className={`voice-status-card ${isListeningCommands ? 'listening' : wakewordDetected ? 'detected' : 'standby'}`}>
-                {isListeningCommands ? (
+            {/* 음성 인식 상태 표시 카드 - isListeningCommands 상태일 때만 표시 */}
+            {isListeningCommands && (
+                <div className="voice-status-card listening"> {/* 항상 listening 클래스 적용 */}
                     <div className="card-content">
                         <div className="card-title">
                             명령을 말씀해주세요
@@ -350,15 +307,8 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                             자연스럽게 말씀해 주세요
                         </div>
                     </div>
-                ) : wakewordDetected ? (
-                    <div className="card-content">웨이크워드 감지됨</div>
-                ) : (
-                    <div className="card-content">
-                        <span className="wake-phrase">"Hey Barry-on"</span>
-                        <span className="wake-hint">이라고 말해보세요</span>
-                    </div>
-                )}
-            </div>
+                </div>
+            )}
 
             {/* 스타일 정의 */}
             <style>
@@ -377,130 +327,35 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     height: 100%;
                     width: 100%;
                 }
-                
-                /* 상단 음성 활동 바 */
-                .voice-activity-bar {
+
+                /* 화면 가장자리 펄스 효과 */
+                .pulsating-border-effect {
                     position: fixed;
                     top: 0;
                     left: 0;
                     width: 100%;
-                    height: 46px;
-                    background-color: rgba(10, 30, 58, 0.85);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
-                    z-index: 990;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 0 20px;
+                    height: 100%;
+                    pointer-events: none; /* 다른 요소 클릭 방해하지 않도록 */
+                    z-index: 995; /* 다른 UI 요소들과의 관계 고려, 카드보다는 아래에 */
+                    animation: pulse-glow-animation 2.5s infinite alternate ease-in-out;
+                    /* box-shadow를 사용하므로 border 속성은 필요 없음 */
+                }
+
+                @keyframes pulse-glow-animation {
+                    0% {
+                        box-shadow: 
+                            inset 0 0 25px 12px rgba(0, 160, 255, 0.25), /* 안쪽으로 부드럽게 퍼지는 빛 */
+                            0 0 25px 12px rgba(0, 160, 255, 0.25);  /* 바깥쪽으로 부드럽게 퍼지는 빛 */
+                    }
+                    100% {
+                        box-shadow: 
+                            inset 0 0 50px 25px rgba(0, 160, 255, 0.55), /* 안쪽으로 더 넓고 진하게 퍼지는 빛 */
+                            0 0 50px 25px rgba(0, 160, 255, 0.55);  /* 바깥쪽으로 더 넓고 진하게 퍼지는 빛 */
+                    }
                 }
                 
-                .voice-activity-bar-inner {
-                    max-width: 800px;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                }
-                
-                .voice-activity-indicator {
-                    display: flex;
-                    align-items: center;
-                    gap: 2px;
-                    height: 30px;
-                    width: 180px;
-                }
-                
-                .activity-bar {
-                    flex: 1;
-                    background: linear-gradient(to top, rgba(0, 160, 255, 0.6), rgba(32, 196, 255, 0.9));
-                    border-radius: 1px;
-                    min-height: 2px;
-                }
-                
-                .voice-status-text {
-                    color: white;
-                    font-size: 14px;
-                    font-weight: 500;
-                }
-                
-                .mic-icon-small {
-                    width: 22px;
-                    height: 22px;
-                    color: white;
-                    background-color: rgba(0, 160, 255, 0.8);
-                    border-radius: 50%;
-                    padding: 4px;
-                    box-shadow: 0 0 8px rgba(0, 160, 255, 0.6);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                
-                /* 코너 인디케이터 */
-                .corner-indicator {
-                    position: fixed;
-                    width: 80px;
-                    height: 80px;
-                    pointer-events: none;
-                    z-index: 989;
-                }
-                
-                .corner-0 {
-                    top: 0;
-                    left: 0;
-                    background: radial-gradient(circle at top left, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
-                    box-shadow: -10px -10px 30px rgba(0, 160, 255, 0.2);
-                    animation: pulse-corner-0 2s infinite alternate ease-in-out;
-                }
-                
-                .corner-1 {
-                    top: 0;
-                    right: 0;
-                    background: radial-gradient(circle at top right, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
-                    box-shadow: 10px -10px 30px rgba(0, 160, 255, 0.2);
-                    animation: pulse-corner-1 2s infinite alternate ease-in-out;
-                }
-                
-                .corner-2 {
-                    bottom: 0;
-                    left: 0; 
-                    background: radial-gradient(circle at bottom left, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
-                    box-shadow: -10px 10px 30px rgba(0, 160, 255, 0.2);
-                    animation: pulse-corner-2 2s infinite alternate ease-in-out;
-                }
-                
-                .corner-3 {
-                    bottom: 0;
-                    right: 0;
-                    background: radial-gradient(circle at bottom right, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
-                    box-shadow: 10px 10px 30px rgba(0, 160, 255, 0.2);
-                    animation: pulse-corner-3 2s infinite alternate ease-in-out;
-                }
-                
-                @keyframes pulse-corner-0 {
-                    0% { opacity: 0.6; box-shadow: -5px -5px 15px rgba(0, 160, 255, 0.2); }
-                    100% { opacity: 1; box-shadow: -10px -10px 30px rgba(0, 160, 255, 0.4); }
-                }
-                
-                @keyframes pulse-corner-1 {
-                    0% { opacity: 0.6; box-shadow: 5px -5px 15px rgba(0, 160, 255, 0.2); }
-                    100% { opacity: 1; box-shadow: 10px -10px 30px rgba(0, 160, 255, 0.4); }
-                }
-                
-                @keyframes pulse-corner-2 {
-                    0% { opacity: 0.6; box-shadow: -5px 5px 15px rgba(0, 160, 255, 0.2); }
-                    100% { opacity: 1; box-shadow: -10px 10px 30px rgba(0, 160, 255, 0.4); }
-                }
-                
-                @keyframes pulse-corner-3 {
-                    0% { opacity: 0.6; box-shadow: 5px 5px 15px rgba(0, 160, 255, 0.2); }
-                    100% { opacity: 1; box-shadow: 10px 10px 30px rgba(0, 160, 255, 0.4); }
-                }
-                
-                /* 기존 음성 인식 상태 카드 스타일 유지 */
-                .voice-status-card {
+                /* 음성 인식 상태 카드 스타일 */
+                .voice-status-card { /* 공통 스타일 */
                     position: fixed;
                     bottom: 20px;
                     left: 20px;
@@ -509,25 +364,17 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     color: white;
                     font-size: 14px;
                     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-                    z-index: 1000;
+                    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out; /* AnimatePresence와 함께 부드러운 등장/퇴장 */
+                    z-index: 1000; /* 가장자리 효과보다 위에 있도록 */
                     backdrop-filter: blur(10px);
                     -webkit-backdrop-filter: blur(10px);
                     border: 1px solid rgba(255, 255, 255, 0.12);
                     min-width: 180px;
                 }
 
-                .voice-status-card.standby {
-                    background-color: rgba(30, 30, 30, 0.75);
-                }
-
-                .voice-status-card.detected {
-                    background-color: rgba(0, 112, 74, 0.85);
-                }
-
-                .voice-status-card.listening {
-                    background-color: rgba(0, 97, 185, 0.85);
-                    box-shadow: 0 4px 25px rgba(0, 136, 255, 0.35);
+                .voice-status-card.listening { /* 명령 인식 중일 때의 스타일 */
+                    background-color: rgba(0, 97, 185, 0.85); 
+                    box-shadow: 0 4px 25px rgba(0, 136, 255, 0.35); 
                 }
 
                 .card-content {
@@ -545,15 +392,10 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     opacity: 0.9;
                 }
 
-                .wake-phrase {
-                    font-weight: 500;
-                }
-
-                .wake-hint {
-                    font-size: 12px;
-                    margin-left: 5px;
-                    opacity: 0.8;
-                }
+                /* 더 이상 사용되지 않는 스타일 제거 */
+                /* .voice-activity-bar, .activity-bar, .voice-status-text, .mic-icon-small 등 제거 */
+                /* .corner-indicator 및 관련 @keyframes 제거 */
+                /* .wake-phrase, .wake-hint 스타일 제거 */
                 `}
             </style>
         </>
