@@ -284,7 +284,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
             <AnimatePresence>
                 {isListeningCommands && (
                     <>
-                        {/* 상단 중앙 리스닝 인디케이터 */}
+                        {/* 상단 중앙 리스닝 인디케이터 - 개선된 버전 */}
                         <motion.div
                             className="top-listening-indicator"
                             initial={{ opacity: 0, y: -20 }}
@@ -293,6 +293,8 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                             transition={{ duration: 0.4, ease: "easeOut" }}
                         >
                             <div className="sound-wave-icon">
+                                <span />
+                                <span />
                                 <span />
                                 <span />
                                 <span />
@@ -350,49 +352,63 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     width: 100%;
                 }
 
-                /* 상단 중앙 리스닝 인디케이터 */
+                /* 상단 중앙 리스닝 인디케이터 - 개선된 스타일 */
                 .top-listening-indicator {
                     position: fixed;
                     top: 20px; /* 화면 상단과의 간격 */
                     left: 50%;
                     transform: translateX(-50%);
+                    width: auto; /* 내용물에 맞게 너비 조정 */
                     display: flex;
                     align-items: center;
-                    padding: 8px 16px;
-                    background-color: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
-                    border-radius: 20px; /* 둥근 모서리 */
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-                    z-index: 1001; /* 카드보다 위에, 테두리 효과보다 위에 */
+                    justify-content: center; /* 내부 요소들 중앙 정렬 */
+                    padding: 8px 20px; /* 좌우 패딩 더 추가 */
+                    background: linear-gradient(90deg, rgba(0, 110, 255, 0.8), rgba(0, 150, 255, 0.8)); /* 그라데이션 적용 */
+                    border-radius: 24px; /* 더 둥글게 */
+                    box-shadow: 0 3px 15px rgba(0, 136, 255, 0.4); /* 그림자 강화 */
+                    z-index: 1001;
                     color: white;
+                    border: 1px solid rgba(255, 255, 255, 0.2); /* 테두리 추가 */
+                    backdrop-filter: blur(8px); /* 배경 블러 효과 */
+                    -webkit-backdrop-filter: blur(8px);
+                    text-align: center; /* 텍스트 중앙 정렬 */
                 }
 
                 .sound-wave-icon {
                     display: flex;
-                    align-items: flex-end; /* 막대들이 아래 정렬되도록 */
-                    height: 16px; /* 아이콘 높이 */
-                    margin-right: 8px;
+                    align-items: flex-end;
+                    height: 16px;
+                    margin-right: 12px; /* 간격 늘림 */
                 }
 
                 .sound-wave-icon span {
                     display: inline-block;
-                    width: 3px; /* 막대 두께 */
-                    margin: 0 1.5px; /* 막대 간 간격 */
+                    width: 3px;
+                    margin: 0 1.5px;
                     background-color: white;
-                    border-radius: 2px; /* 막대 둥글게 */
+                    border-radius: 2px;
                     animation: sound-wave-animation 1.2s infinite ease-in-out;
                 }
 
                 .sound-wave-icon span:nth-child(1) {
-                    height: 60%; /* 초기 높이 */
+                    height: 40%;
                     animation-delay: 0s;
                 }
                 .sound-wave-icon span:nth-child(2) {
-                    height: 100%;
+                    height: 70%;
                     animation-delay: 0.2s;
                 }
                 .sound-wave-icon span:nth-child(3) {
-                    height: 80%;
+                    height: 100%;
                     animation-delay: 0.4s;
+                }
+                .sound-wave-icon span:nth-child(4) {
+                    height: 70%;
+                    animation-delay: 0.6s;
+                }
+                .sound-wave-icon span:nth-child(5) {
+                    height: 40%;
+                    animation-delay: 0.8s;
                 }
 
                 @keyframes sound-wave-animation {
@@ -401,8 +417,10 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 }
 
                 .listening-text {
-                    font-size: 14px;
+                    font-size: 15px; /* 더 크게 */
                     font-weight: 500;
+                    letter-spacing: 0.5px; /* 자간 추가 */
+                    color: rgba(255, 255, 255, 1); /* 더 밝게 */
                 }
 
 
@@ -450,8 +468,9 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 }
 
                 .voice-status-card.listening { /* 명령 인식 중일 때의 스타일 */
-                    background-color: rgba(0, 97, 185, 0.85); 
+                    background: linear-gradient(135deg, rgba(0, 110, 255, 0.85), rgba(0, 150, 255, 0.85)); /* 상단 인디케이터와 일치 */
                     box-shadow: 0 4px 25px rgba(0, 136, 255, 0.35); 
+                    border: 1px solid rgba(255, 255, 255, 0.2); /* 테두리 추가 */
                 }
 
                 .card-content {
