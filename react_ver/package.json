@@ -9,8 +9,9 @@
   "dependencies": {
     "@chengsokdara/use-whisper": "^0.2.0",
     "@picovoice/porcupine-react": "^3.0.3",
+    "@picovoice/rhino-react": "^3.0.3",
     "@picovoice/web-voice-processor": "^4.0.9",
-    "framer-motion": "^12.6.2",
+    "framer-motion": "^12.10.5",
     "mqtt": "^5.10.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
