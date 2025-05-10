@@ -352,34 +352,36 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     width: 100%;
                 }
 
-                /* 상단 중앙 리스닝 인디케이터 - 개선된 스타일 */
-                .top-listening-indicator {
-                    position: fixed;
-                    top: 20px; /* 화면 상단과의 간격 */
-                    left: 50%;
-                    transform: translateX(-50%); /* 정확히 중앙 정렬 */
-                    width: auto; /* 내용물에 맞게 너비 조정 */
-                    display: flex;
-                    align-items: center;
-                    justify-content: center; /* 내부 요소들 중앙 정렬 */
-                    padding: 8px 20px; /* 좌우 패딩 동일하게 */
-                    background: rgba(0, 0, 0, 0.7); /* 검정색 배경으로 변경 */
-                    border-radius: 24px; /* 더 둥글게 */
-                    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4); /* 그림자 색상도 검정색으로 변경 */
-                    z-index: 1001;
-                    color: white;
-                    border: 1px solid rgba(255, 255, 255, 0.15); /* 테두리 조금 어둡게 */
-                    backdrop-filter: blur(8px); /* 배경 블러 효과 */
-                    -webkit-backdrop-filter: blur(8px);
-                    text-align: center; /* 텍스트 중앙 정렬 */
-                }
+/* 상단 중앙 리스닝 인디케이터 - 정확한 중앙 정렬로 수정 (모든 효과 유지) */
+.top-listening-indicator {
+    position: fixed;
+    top: 20px; /* 화면 상단과의 간격 */
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: max-content; /* 내용물에 맞게 너비 조정 */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 내부 콘텐츠도 중앙 정렬 */
+    padding: 8px 20px; /* 좌우 패딩 동일하게 */
+    background: rgba(0, 0, 0, 0.7); /* 검정색 배경으로 변경 */
+    border-radius: 24px; /* 더 둥글게 */
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4); /* 그림자 색상도 검정색으로 변경 */
+    z-index: 1001;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.15); /* 테두리 조금 어둡게 */
+    backdrop-filter: blur(8px); /* 배경 블러 효과 유지 */
+    -webkit-backdrop-filter: blur(8px);
+}
 
-                .sound-wave-icon {
-                    display: flex;
-                    align-items: flex-end;
-                    height: 16px;
-                    margin-right: 12px; /* 간격 늘림 */
-                }
+/* 사운드 웨이브 아이콘과 텍스트 간격을 균일하게 조정 */
+.sound-wave-icon {
+    display: flex;
+    align-items: flex-end;
+    height: 16px;
+    margin-right: 8px; /* 왼쪽과 오른쪽 여백 동일하게 */
+}
 
                 .sound-wave-icon span {
                     display: inline-block;
