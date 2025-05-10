@@ -3,6 +3,7 @@ import { usePorcupine } from '@picovoice/porcupine-react';
 import { useRhino } from '@picovoice/rhino-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 const VoiceCommandSystem = ({ onVoiceCommand }) => {
     // 기존 상태 및 설정 코드 유지...
     const [wakewordDetected, setWakewordDetected] = useState(false);
@@ -279,44 +280,62 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
             <audio ref={wakeAudioRef} src="/sounds/wake.mp3" preload="auto" />
             <audio ref={successAudioRef} src="/sounds/success.mp3" preload="auto" />
 
-            {/* 음성 인식 시각화 - AnimatePresence로 부드러운 표시/숨김 처리 */}
+            {/* 음성 인식 시각화 - 코너 인디케이터 & 상단 바 */}
             <AnimatePresence>
                 {isListeningCommands && (
-                    <motion.div
-                        className="voice-recognition-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        {/* 상단 음성 시각화 인디케이터 */}
-                        <motion.div className="voice-visualizer-container">
-                            {/* 음성 파형 시각화 */}
-                            <div className="voice-waveform">
-                                {[...Array(30)].map((_, i) => (
-                                    <motion.div
-                                        key={i}
-                                        className="waveform-bar"
-                                        animate={{
-                                            height: [
-                                                `${15 + Math.random() * 35}px`,
-                                                `${15 + Math.random() * 35}px`
-                                            ]
-                                        }}
-                                        transition={{
-                                            duration: 0.6 + Math.random() * 0.7,
-                                            repeat: Infinity,
-                                            repeatType: "reverse",
-                                            ease: "easeInOut"
-                                        }}
-                                    />
-                                ))}
+                    <>
+                        {/* 상단 음성 인식 바 */}
+                        <motion.div
+                            className="voice-activity-bar"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <div className="voice-activity-bar-inner">
+                                <div className="voice-activity-indicator">
+                                    {/* 동적 음성 활동 표시기 */}
+                                    {[...Array(30)].map((_, i) => (
+                                        <motion.div
+                                            key={i}
+                                            className="activity-bar"
+                                            animate={{
+                                                height: [
+                                                    `${5 + Math.random() * 15}px`,
+                                                    `${5 + Math.random() * 15}px`
+                                                ]
+                                            }}
+                                            transition={{
+                                                duration: 0.4 + Math.random() * 0.3,
+                                                repeat: Infinity,
+                                                repeatType: "reverse",
+                                                ease: "easeInOut"
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                                <div className="voice-status-text">음성 인식 중</div>
+                                <div className="mic-icon-small">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                                    </svg>
+                                </div>
                             </div>
                         </motion.div>
 
-                        {/* 움직이는 서브틀한 그라디언트 오버레이 */}
-                        <div className="subtle-gradient-overlay" />
-                    </motion.div>
+                        {/* 코너 인디케이터 */}
+                        {[0, 1, 2, 3].map(corner => (
+                            <motion.div
+                                key={corner}
+                                className={`corner-indicator corner-${corner}`}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ duration: 0.3, delay: corner * 0.1 }}
+                            />
+                        ))}
+                    </>
                 )}
             </AnimatePresence>
 
@@ -328,7 +347,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                             명령을 말씀해주세요
                         </div>
                         <div className="card-subtitle">
-                            음성 인식 중입니다
+                            자연스럽게 말씀해 주세요
                         </div>
                     </div>
                 ) : wakewordDetected ? (
@@ -358,87 +377,135 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     height: 100%;
                     width: 100%;
                 }
-
-                /* 음성 인식 오버레이 */
-                .voice-recognition-overlay {
+                
+                /* 상단 음성 활동 바 */
+                .voice-activity-bar {
                     position: fixed;
                     top: 0;
                     left: 0;
                     width: 100%;
-                    height: 100%;
-                    pointer-events: none;
+                    height: 46px;
+                    background-color: rgba(10, 30, 58, 0.85);
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
                     z-index: 990;
                     display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
                     align-items: center;
+                    justify-content: center;
+                    padding: 0 20px;
                 }
                 
-                /* 서브틀한 그라디언트 오버레이 - 고급스러운 분위기를 더함 */
-                .subtle-gradient-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: 
-                        radial-gradient(
-                            ellipse at top center, 
-                            rgba(84, 58, 183, 0.05) 0%, 
-                            rgba(0, 0, 0, 0) 60%
-                        ),
-                        linear-gradient(
-                            to bottom,
-                            rgba(32, 124, 229, 0.03) 0%,
-                            rgba(32, 124, 229, 0) 100%
-                        );
-                    box-shadow: inset 0 0 100px rgba(0, 60, 255, 0.07);
-                    z-index: -1;
-                }
-
-                /* 음성 시각화 컨테이너 */
-                .voice-visualizer-container {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 70px;
-                    background-color: rgba(0, 27, 64, 0.85);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-                    backdrop-filter: blur(10px);
-                    -webkit-backdrop-filter: blur(10px);
-                    z-index: 992;
-                }
-
-                /* 음성 파형 시각화 */
-                .voice-waveform {
-                    display: flex;
-                    align-items: center;
-                    height: 40px;
-                    gap: 2px;
-                    padding: 0 20px;
-                    width: 60%;
+                .voice-activity-bar-inner {
                     max-width: 800px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                 }
-
-                .waveform-bar {
+                
+                .voice-activity-indicator {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                    height: 30px;
+                    width: 180px;
+                }
+                
+                .activity-bar {
                     flex: 1;
-                    background: linear-gradient(to top, rgba(32, 156, 255, 0.6), rgba(120, 217, 255, 0.9));
-                    border-radius: 2px;
-                    min-height: 3px;
-                    box-shadow: 0 0 8px rgba(32, 156, 255, 0.6);
+                    background: linear-gradient(to top, rgba(0, 160, 255, 0.6), rgba(32, 196, 255, 0.9));
+                    border-radius: 1px;
+                    min-height: 2px;
                 }
-
-                /* 음성 인식 상태 카드 */
+                
+                .voice-status-text {
+                    color: white;
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                
+                .mic-icon-small {
+                    width: 22px;
+                    height: 22px;
+                    color: white;
+                    background-color: rgba(0, 160, 255, 0.8);
+                    border-radius: 50%;
+                    padding: 4px;
+                    box-shadow: 0 0 8px rgba(0, 160, 255, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                /* 코너 인디케이터 */
+                .corner-indicator {
+                    position: fixed;
+                    width: 80px;
+                    height: 80px;
+                    pointer-events: none;
+                    z-index: 989;
+                }
+                
+                .corner-0 {
+                    top: 0;
+                    left: 0;
+                    background: radial-gradient(circle at top left, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
+                    box-shadow: -10px -10px 30px rgba(0, 160, 255, 0.2);
+                    animation: pulse-corner-0 2s infinite alternate ease-in-out;
+                }
+                
+                .corner-1 {
+                    top: 0;
+                    right: 0;
+                    background: radial-gradient(circle at top right, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
+                    box-shadow: 10px -10px 30px rgba(0, 160, 255, 0.2);
+                    animation: pulse-corner-1 2s infinite alternate ease-in-out;
+                }
+                
+                .corner-2 {
+                    bottom: 0;
+                    left: 0; 
+                    background: radial-gradient(circle at bottom left, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
+                    box-shadow: -10px 10px 30px rgba(0, 160, 255, 0.2);
+                    animation: pulse-corner-2 2s infinite alternate ease-in-out;
+                }
+                
+                .corner-3 {
+                    bottom: 0;
+                    right: 0;
+                    background: radial-gradient(circle at bottom right, rgba(0, 160, 255, 0.4) 0%, transparent 70%);
+                    box-shadow: 10px 10px 30px rgba(0, 160, 255, 0.2);
+                    animation: pulse-corner-3 2s infinite alternate ease-in-out;
+                }
+                
+                @keyframes pulse-corner-0 {
+                    0% { opacity: 0.6; box-shadow: -5px -5px 15px rgba(0, 160, 255, 0.2); }
+                    100% { opacity: 1; box-shadow: -10px -10px 30px rgba(0, 160, 255, 0.4); }
+                }
+                
+                @keyframes pulse-corner-1 {
+                    0% { opacity: 0.6; box-shadow: 5px -5px 15px rgba(0, 160, 255, 0.2); }
+                    100% { opacity: 1; box-shadow: 10px -10px 30px rgba(0, 160, 255, 0.4); }
+                }
+                
+                @keyframes pulse-corner-2 {
+                    0% { opacity: 0.6; box-shadow: -5px 5px 15px rgba(0, 160, 255, 0.2); }
+                    100% { opacity: 1; box-shadow: -10px 10px 30px rgba(0, 160, 255, 0.4); }
+                }
+                
+                @keyframes pulse-corner-3 {
+                    0% { opacity: 0.6; box-shadow: 5px 5px 15px rgba(0, 160, 255, 0.2); }
+                    100% { opacity: 1; box-shadow: 10px 10px 30px rgba(0, 160, 255, 0.4); }
+                }
+                
+                /* 기존 음성 인식 상태 카드 스타일 유지 */
                 .voice-status-card {
                     position: fixed;
                     bottom: 20px;
                     left: 20px;
                     padding: 14px 20px;
-                    border-radius: 10px;
+                    border-radius: 12px;
                     color: white;
                     font-size: 14px;
                     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -446,11 +513,12 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     z-index: 1000;
                     backdrop-filter: blur(10px);
                     -webkit-backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    min-width: 180px;
                 }
 
                 .voice-status-card.standby {
-                    background-color: rgba(30, 30, 30, 0.8);
+                    background-color: rgba(30, 30, 30, 0.75);
                 }
 
                 .voice-status-card.detected {
@@ -458,8 +526,8 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 }
 
                 .voice-status-card.listening {
-                    background-color: rgba(32, 124, 229, 0.85);
-                    box-shadow: 0 4px 25px rgba(32, 124, 229, 0.4);
+                    background-color: rgba(0, 97, 185, 0.85);
+                    box-shadow: 0 4px 25px rgba(0, 136, 255, 0.35);
                 }
 
                 .card-content {
