@@ -357,18 +357,18 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     position: fixed;
                     top: 20px; /* 화면 상단과의 간격 */
                     left: 50%;
-                    transform: translateX(-50%);
+                    transform: translateX(-50%); /* 정확히 중앙 정렬 */
                     width: auto; /* 내용물에 맞게 너비 조정 */
                     display: flex;
                     align-items: center;
                     justify-content: center; /* 내부 요소들 중앙 정렬 */
-                    padding: 8px 20px; /* 좌우 패딩 더 추가 */
-                    background: linear-gradient(90deg, rgba(0, 110, 255, 0.8), rgba(0, 150, 255, 0.8)); /* 그라데이션 적용 */
+                    padding: 8px 20px; /* 좌우 패딩 동일하게 */
+                    background: rgba(0, 0, 0, 0.7); /* 검정색 배경으로 변경 */
                     border-radius: 24px; /* 더 둥글게 */
-                    box-shadow: 0 3px 15px rgba(0, 136, 255, 0.4); /* 그림자 강화 */
+                    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4); /* 그림자 색상도 검정색으로 변경 */
                     z-index: 1001;
                     color: white;
-                    border: 1px solid rgba(255, 255, 255, 0.2); /* 테두리 추가 */
+                    border: 1px solid rgba(255, 255, 255, 0.15); /* 테두리 조금 어둡게 */
                     backdrop-filter: blur(8px); /* 배경 블러 효과 */
                     -webkit-backdrop-filter: blur(8px);
                     text-align: center; /* 텍스트 중앙 정렬 */
@@ -424,7 +424,7 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                 }
 
 
-                /* 화면 가장자리 펄스 효과 */
+                /* 화면 가장자리 펄스 효과 - 더 동적이고 빠르게 */
                 .pulsating-border-effect {
                     position: fixed;
                     top: 0;
@@ -433,19 +433,24 @@ const VoiceCommandSystem = ({ onVoiceCommand }) => {
                     height: 100%;
                     pointer-events: none; /* 다른 요소 클릭 방해하지 않도록 */
                     z-index: 995; /* 다른 UI 요소들과의 관계 고려, 카드보다는 아래에 */
-                    animation: pulse-glow-animation 2.2s infinite alternate ease-in-out; /* 애니메이션 속도 약간 빠르게 */
+                    animation: pulse-glow-animation 1.8s infinite alternate ease-in-out; /* 더 빠른 애니메이션 */
                 }
 
                 @keyframes pulse-glow-animation {
                     0% {
                         box-shadow: 
-                            inset 0 0 30px 15px rgba(0, 150, 255, 0.3), /* 안쪽 빛: 확산 범위 증가, 투명도 약간 증가 */
-                            0 0 30px 15px rgba(0, 150, 255, 0.3);  /* 바깥쪽 빛: 확산 범위 증가, 투명도 약간 증가 */
+                            inset 0 0 30px 15px rgba(0, 150, 255, 0.3), /* 안쪽 빛 */
+                            0 0 30px 15px rgba(0, 150, 255, 0.3);  /* 바깥쪽 빛 */
+                    }
+                    50% { /* 중간 상태 추가로 더 부드럽고 동적인 효과 */
+                        box-shadow: 
+                            inset 0 0 50px 25px rgba(0, 160, 255, 0.55), /* 중간 단계 */
+                            0 0 50px 25px rgba(0, 160, 255, 0.55);
                     }
                     100% {
                         box-shadow: 
-                            inset 0 0 60px 30px rgba(0, 170, 255, 0.65), /* 안쪽 빛: 확산 범위 대폭 증가, 투명도 대폭 증가 */
-                            0 0 60px 30px rgba(0, 170, 255, 0.65);  /* 바깥쪽 빛: 확산 범위 대폭 증가, 투명도 대폭 증가 */
+                            inset 0 0 70px 35px rgba(0, 170, 255, 0.75), /* 더 넓고 진하게 */
+                            0 0 70px 35px rgba(0, 170, 255, 0.75);
                     }
                 }
                 
